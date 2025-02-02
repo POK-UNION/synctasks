@@ -21,9 +21,7 @@ export default function Chat({ userName }) {
 
   useEffect(() => {
     const queryGroupID = router.query.groupID;
-    if (queryGroupID) {
-      setGroupID(queryGroupID);
-    }
+    setGroupID(queryGroupID || null);
     fetchMessages(queryGroupID);
   }, [router.query.groupID]);
 
@@ -82,18 +80,22 @@ export default function Chat({ userName }) {
         <p>Sender: {userName}</p>
       </div>
       <div className="flex-1 overflow-y-auto bg-white shadow p-4 rounded">
-        {messages.map((msg, index) => (
-          <div key={index} className={`flex ${msg.sender === user?.fullName ? "justify-end" : "justify-start"}`}>
-            <div
-            className={`mb-2 p-2 rounded max-w-xs ${
-              msg.sender === user?.fullName ? "bg-green-200" : "bg-blue-200"
-            }`}
-            >
-              <strong>{msg.sender}:</strong> {msg.content}
-              <div className="text-xs text-gray-500">{new Date(msg.createdAt).toLocaleString()}</div>
-              </div>
-          </div>
-        ))}
+        {messages.length === 0 ? (
+          <p>No message found</p>
+        ) : (
+          messages.map((msg, index) => (
+            <div key={index} className={`flex ${msg.sender === user?.fullName ? "justify-end" : "justify-start"}`}>
+              <div
+              className={`mb-2 p-2 rounded max-w-xs ${
+                msg.sender === user?.fullName ? "bg-green-200" : "bg-blue-200"
+              }`}
+              >
+                <strong>{msg.sender}:</strong> {msg.content}
+                <div className="text-xs text-gray-500">{new Date(msg.createdAt).toLocaleString()}</div>
+                </div>
+            </div>
+          ))
+        )}
       </div>
       <div className="flex mt-4">
         <textarea

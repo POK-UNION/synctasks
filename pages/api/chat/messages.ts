@@ -7,22 +7,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { groupID } = req.query;
       console.log("Fetching messages for groupID:", groupID);
 
-      let messages: any[];
-      if (groupID !== undefined) {
+      let messages;
+      if (groupID) {
         messages = await prisma.message.findMany({
-          where: { groupID: groupID ? Number(groupID) : null },
+          where: { groupID: groupID as string },
           orderBy: { createdAt: 'asc' }
         });
       } else {
         messages = await prisma.message.findMany({
+          where: { groupID: null },
           orderBy: { createdAt: 'asc' }
         });
       }
 
-      // Return an empty array if no messages are found
       if (!messages || messages.length === 0) {
         console.log("No messages found");
-        messages = [];
+        res.status(200).json([]); // Return an empty array if no messages are found
+        return;
       }
 
       res.status(200).json(messages);
@@ -33,17 +34,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else if (req.method === "POST") {
     try {
       const { sender, content, groupID } = req.body;
-      if (!sender) {
-        throw new Error("Sender is required");
-      }
-      console.log("Creating message with data:", { sender, content, groupID }); // Log received data
+      console.log("Creating message with data:", { sender, content, groupID });
 
       const newMessage = await prisma.message.create({
-        data: { sender, content, groupID: groupID ? Number(groupID) : null },
+        data: { sender, content, groupID: groupID ? groupID : null },
       });
 
       if (!newMessage) {
-        throw new Error("Failed to create message");
+        console.log("Failed to create message");
+        res.status(500).json({ message: "Failed to create message" });
+        return;
       }
 
       res.status(201).json(newMessage);
@@ -52,6 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(500).json({ message: "Error creating message", error: error instanceof Error ? error.message : "Unknown error" });
     }
   } else {
-    res.status(405).json({ message: "Method Not Allowed" });
+    res.setHeader("Allow", ["GET", "POST"]);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

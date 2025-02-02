@@ -93,12 +93,8 @@ export default function GroupPage() {
 
       <div className="mb-4 flex space-x-2">
         <input
-          className={`border p-2 ${
-            errors.namaGroup ? "border-red-500" : "border-gray-300"
-          }`}
-          placeholder={
-            errors.namaGroup ? "Nama grup harus diisi!" : "Nama Group"
-          }
+          className={`border p-2 ${errors.namaGroup ? "border-red-500" : "border-gray-300"}`}
+          placeholder={errors.namaGroup ? "Nama grup harus diisi!" : "Nama Group"}
           value={newGroup.namaGroup}
           onChange={(e) => {
             setNewGroup({ ...newGroup, namaGroup: e.target.value });
@@ -107,12 +103,8 @@ export default function GroupPage() {
         />
 
         <input
-          className={`border p-2 ${
-            errors.deskripsi ? "border-red-500" : "border-gray-300"
-          }`}
-          placeholder={
-            errors.deskripsi ? "Deskripsi harus diisi!" : "Deskripsi"
-          }
+          className={`border p-2 ${errors.deskripsi ? "border-red-500" : "border-gray-300"}`}
+          placeholder={errors.deskripsi ? "Deskripsi harus diisi!" : "Deskripsi"}
           value={newGroup.deskripsi}
           onChange={(e) => {
             setNewGroup({ ...newGroup, deskripsi: e.target.value });
@@ -127,18 +119,11 @@ export default function GroupPage() {
 
       <ul>
         {groups.map((group) => (
-          <li
-            key={group.groupID}
-            className="p-2 border relative"
-            onClick={() => openChat(group.groupID)}
-          >
+          <li key={group.groupID} className="p-2 border relative" onClick={() => openChat(group.groupID)}>
             <h3 className="font-semibold">{group.namaGroup}</h3>
             <p>{group.deskripsi}</p>
             <div className="absolute top-2 right-2 flex space-x-2">
-              <button
-                onClick={() => deleteGroup(group.groupID)}
-                className="flex items-center"
-              >
+              <button onClick={() => deleteGroup(group.groupID)} className="flex items-center">
                 <FaTrash />
               </button>
               <button
@@ -169,9 +154,7 @@ export default function GroupPage() {
       {showPopup && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-5 rounded">
-            <h2 className="text-xl mb-4">
-              {showPopup === "add" ? "Tambah Anggota" : "Hapus Anggota"}
-            </h2>
+            <h2 className="text-xl mb-4">{showPopup === "add" ? "Tambah Anggota" : "Hapus Anggota"}</h2>
             <div className="max-h-60 overflow-y-auto">
               {allUsers.map((user) => (
                 <div key={user.userID}>
@@ -180,9 +163,7 @@ export default function GroupPage() {
                     checked={selectedUsers.includes(user.userID)}
                     onChange={() => {
                       setSelectedUsers((prev) =>
-                        prev.includes(user.userID)
-                          ? prev.filter((id) => id !== user.userID)
-                          : [...prev, user.userID]
+                        prev.includes(user.userID) ? prev.filter((id) => id !== user.userID) : [...prev, user.userID]
                       );
                     }}
                   />
@@ -191,16 +172,10 @@ export default function GroupPage() {
               ))}
             </div>
             <div className="flex justify-end space-x-2 mt-4">
-              <button
-                onClick={() => setShowPopup(null)}
-                className="bg-gray-500 text-white p-2 rounded"
-              >
+              <button onClick={() => setShowPopup(null)} className="bg-gray-500 text-white p-2 rounded">
                 Batal
               </button>
-              <button
-                onClick={() => updateMember(showPopup, selectedGroup)}
-                className="bg-blue-500 text-white p-2 rounded"
-              >
+              <button onClick={() => updateMember(showPopup, selectedGroup)} className="bg-blue-500 text-white p-2 rounded">
                 Konfirmasi
               </button>
             </div>

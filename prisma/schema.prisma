@@ -14,22 +14,22 @@ datasource db {
 }
 
 model User {
-  userID        String  @id @default(uuid())
+  userID    String   @id @default(uuid())
   name      String
-  email     String  @unique
+  email     String   @unique
   password  String
   createdAt DateTime @default(now())
+  groupMembers GroupMember[]
 }
-
 
 model Message {
   messagesID Int      @id @default(autoincrement())
   sender     String
   content    String
   createdAt  DateTime @default(now())
-  groupID    Int?
+  groupID    String?
+  Group      Group?   @relation(fields: [groupID], references: [groupID])
 }
-
 
 model Notification {
   notifID String @id @default(uuid())
@@ -41,7 +41,8 @@ model Group {
   groupID    String  @id @default(uuid())
   namaGroup  String
   deskripsi  String?
-  anggota    GroupMember[]
+  groupMembers GroupMember[]
+  messages   Message[]
 }
 
 model GroupMember {

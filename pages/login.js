@@ -37,7 +37,7 @@ export default function Login() {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600">
       <div className="bg-white bg-opacity-80 p-10 rounded-3xl shadow-2xl w-96 backdrop-blur-lg">
         <h1 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-400 mb-8">
-          MyApp
+          SyncTask
         </h1>
         
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
